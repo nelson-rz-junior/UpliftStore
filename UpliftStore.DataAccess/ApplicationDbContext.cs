@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace UpliftStore.Data
+namespace UpliftStore.DataAccess.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

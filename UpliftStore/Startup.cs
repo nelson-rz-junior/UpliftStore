@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using UpliftStore.Data;
+using UpliftStore.DataAccess.Data;
 
 namespace UpliftStore
 {
@@ -33,7 +33,6 @@ namespace UpliftStore
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request
                 options.CheckConsentNeeded = context => true;
-
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
@@ -68,7 +67,7 @@ namespace UpliftStore
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
             });

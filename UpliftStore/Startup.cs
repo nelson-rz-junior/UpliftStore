@@ -7,6 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UpliftStore.DataAccess.Data;
+using UpliftStore.DataAccess.Data.Repository;
+using UpliftStore.DataAccess.Data.Repository.Interfaces;
+using UpliftStore.Utility;
+using UpliftStore.Utility.Interfaces;
 
 namespace UpliftStore
 {
@@ -24,8 +28,13 @@ namespace UpliftStore
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -36,7 +45,10 @@ namespace UpliftStore
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson();
+
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

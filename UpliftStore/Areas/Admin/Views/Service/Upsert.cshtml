@@ -1,0 +1,148 @@
+﻿@model UpliftStore.Models.ViewModels.ServiceViewModel
+
+@{
+    ViewData["Title"] = Model.Service.Id != 0 ? "Edit Service" : "Create Service";
+}
+
+<form method="post" asp-action="Upsert" enctype="multipart/form-data">
+    <div class="row px-2 mx-2 backgroundWhite border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (Model.Service.Id != 0)
+        {
+            <input type="hidden" asp-for="Service.Id" />
+        }
+
+        <div class="col-12">
+            <h2 class="text-primary">@ViewData["Title"]</h2>
+            <br />
+        </div>
+        <div class="col-9">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Service.Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Service.Name" class="form-control" />
+                    <span asp-validation-for="Service.Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Service.Description"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="Service.Description" class="form-control" style="height:300px;"></textarea>
+                    <span asp-validation-for="Service.Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Service.CategoryId"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="Service.CategoryId" asp-items="@Model.Categories" class="form-control">
+                        <option value="">- Please select a category -</option>
+                    </select>
+                    <span asp-validation-for="Service.CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Service.FrequencyId"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="Service.FrequencyId" asp-items="@Model.Frequencies" class="form-control">
+                        <option value="">- Please select a frequency -</option>
+                    </select>
+                    <span asp-validation-for="Service.FrequencyId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Service.Price"></label>
+                </div>
+                <div class="col-8">
+                    @* Para a validação correta do formato decimal foi necessário adicionar o arquivo methods_pt.js na pasta jquery-validation/dist e 
+                        referenciá-lo na view _ValidationScriptsPartial.cshtml *@
+                    <input asp-for="Service.Price" class="form-control" />
+                    <span asp-validation-for="Service.Price" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Service.ImageFile"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" id="uploadBox" asp-for="UploadImage" class="form-control-file" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    @if (Model.Service.Id != 0)
+                    {
+                        <partial name="_EditAndBackToListButton" model="Model.Service.Id" />
+                    }
+                    else
+                    {
+                        <partial name="_CreateAndBackToListButton" />
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Service.Id != 0)
+        {
+            <div class="col-3">
+                <img src="/images/services/@Model.Service.ImageFile" width="100%" style="border-radius:5px; border:1px solid #bbb9b9" />
+            </div>
+        }
+        
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar: 'file edit format'
+        });
+
+        $(function () {
+            var btnCreateElement = document.getElementById('btnCreateElement');
+            if (btnCreateElement) {
+                var uploadBox = document.getElementById('uploadBox');
+
+                btnCreateElement.addEventListener('click', function () {
+                    if (uploadBox.value === '') {
+                        event.preventDefault();
+
+                        swal({
+                            text: "Please select an image.",
+                            icon: "warning"
+                        }).then(() => {
+                            uploadBox.focus();
+                            uploadBox.style.backgroundColor = '#f5c8c3';
+                        });
+
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                uploadBox.addEventListener('change', function () {
+                    if ($(this).val() === '') {
+                        uploadBox.style.backgroundColor = '#f5c8c3';
+                    }
+                    else {
+                        uploadBox.style.backgroundColor = '#ffffff';
+                    }
+                });
+            }
+        });
+    </script>
+}

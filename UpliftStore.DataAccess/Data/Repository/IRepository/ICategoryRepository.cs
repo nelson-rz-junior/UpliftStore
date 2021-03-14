@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using UpliftStore.Models;
 
 namespace UpliftStore.DataAccess.Data.Repository.Interfaces

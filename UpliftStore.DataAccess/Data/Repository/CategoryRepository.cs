@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
 using UpliftStore.Models;
 

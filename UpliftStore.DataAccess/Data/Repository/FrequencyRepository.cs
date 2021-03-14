@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Web.Mvc;
 using UpliftStore.DataAccess.Data.Repository.IRepository;
 using UpliftStore.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace UpliftStore.DataAccess.Data.Repository
 {

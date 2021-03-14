@@ -61,7 +61,7 @@ namespace UpliftStore.Areas.Admin.Controllers
 
         #region API Calls
 
-        [HttpGet("api/[controller]")]
+        [HttpGet("api/categories")]
         public IActionResult GetAll()
         {
             return new JsonResult(new 

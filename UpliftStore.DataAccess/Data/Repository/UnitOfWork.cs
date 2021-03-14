@@ -11,12 +11,15 @@ namespace UpliftStore.DataAccess.Data.Repository
 
         public IFrequencyRepository FrequencyRepository { get; private set; }
 
+        public IServiceRepository ServiceRepository { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
 
             CategoryRepository = new CategoryRepository(_context);
             FrequencyRepository = new FrequencyRepository(_context);
+            ServiceRepository = new ServiceRepository(_context);
         }
 
         public void Save()

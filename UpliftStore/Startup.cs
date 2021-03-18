@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using UpliftStore.DataAccess.Data;
 using UpliftStore.DataAccess.Data.Repository;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
@@ -35,6 +36,13 @@ namespace UpliftStore
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -68,6 +76,7 @@ namespace UpliftStore
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseSession();
             app.UseCookiePolicy();
 
             app.UseRouting();

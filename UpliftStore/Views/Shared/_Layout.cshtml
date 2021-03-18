@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using UpliftStore.Utility
+@using UpliftStore.Extensions
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor httpContextAccessor 
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,6 +40,27 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+                        @{ 
+                            var cartItemIds = httpContextAccessor.HttpContext.Session.GetObject<List<int>>(SD.SessionCart);
+                        }
+
+                        @if (cartItemIds != null)
+                        {
+                            <li class="nav-item">
+                                <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link text-white">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (@cartItemIds.Count)
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a href="#" class="nav-link text-white">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
+using UpliftStore.Extensions;
 using UpliftStore.Models;
 using UpliftStore.Models.ViewModels;
+using UpliftStore.Utility;
 
 namespace UpliftStore.Areas.Customer.Controllers
 {
@@ -29,6 +33,33 @@ namespace UpliftStore.Areas.Customer.Controllers
             };
 
             return View(homeViewModel);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var service = _unitOfWork.ServiceRepository.GetFirstOrDefault(includeProperties: "Category,Frequency", filter: s => s.Id == id);
+            return View(service);
+        }
+
+        public IActionResult AddToCart(int serviceId)
+        {
+            List<int> cartItemIds = new List<int>();
+            if (string.IsNullOrWhiteSpace(HttpContext.Session.GetString(SD.SessionCart)))
+            {
+                cartItemIds.Add(serviceId);
+                HttpContext.Session.SetObject(SD.SessionCart, cartItemIds);
+            }
+            else
+            {
+                cartItemIds = HttpContext.Session.GetObject<List<int>>(SD.SessionCart);
+                if (!cartItemIds.Contains(serviceId))
+                {
+                    cartItemIds.Add(serviceId);
+                    HttpContext.Session.SetObject(SD.SessionCart, cartItemIds);
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()

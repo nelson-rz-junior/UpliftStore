@@ -11,6 +11,10 @@ namespace UpliftStore.DataAccess.Data.Repository.Interfaces
 
         IServiceRepository ServiceRepository { get; }
 
+        IOrderHeaderRepository OrderHeaderRepository { get; }
+
+        IOrderDetailRepository OrderDetailRepository { get; }
+
         void Save();
     }
 }

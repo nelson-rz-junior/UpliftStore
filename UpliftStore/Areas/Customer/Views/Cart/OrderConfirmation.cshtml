@@ -1,0 +1,19 @@
+﻿@model int 
+@{ 
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="container row">
+    <div class="col-12 text-center">
+        <h2 class="text-primary text-center">Order request submitted!</h2>
+
+        <div class="col-12 text-center" style="color:maroon">
+            Thank you for submitting a request online!
+            We have received your request and out team will be call you shortly!
+            <br />
+            Your request number is: @Model
+        </div>
+        <br />
+        <img src="~/images/lawn_leaf.jpg" width="100%" />
+    </div>
+</div>

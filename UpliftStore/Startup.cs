@@ -10,6 +10,7 @@ using System;
 using UpliftStore.DataAccess.Data;
 using UpliftStore.DataAccess.Data.Repository;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
+using UpliftStore.Models;
 using UpliftStore.Utility;
 using UpliftStore.Utility.Interfaces;
 
@@ -29,7 +30,7 @@ namespace UpliftStore
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

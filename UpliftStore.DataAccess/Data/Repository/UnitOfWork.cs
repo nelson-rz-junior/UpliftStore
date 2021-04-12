@@ -17,6 +17,8 @@ namespace UpliftStore.DataAccess.Data.Repository
 
         public IOrderDetailRepository OrderDetailRepository { get; private set; }
 
+        public IUserRepository UserRepository { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -26,6 +28,7 @@ namespace UpliftStore.DataAccess.Data.Repository
             ServiceRepository = new ServiceRepository(_context);
             OrderHeaderRepository = new OrderHeaderRepository(_context);
             OrderDetailRepository = new OrderDetailRepository(_context);
+            UserRepository = new UserRepository(_context);
         }
 
         public void Save()

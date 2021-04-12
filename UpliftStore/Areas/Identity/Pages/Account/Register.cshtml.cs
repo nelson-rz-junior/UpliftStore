@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using UpliftStore.Models;
+using UpliftStore.Utility;
 using UpliftStore.Utility.Interfaces;
 
 namespace UpliftStore.Areas.Identity.Pages.Account
@@ -22,13 +19,16 @@ namespace UpliftStore.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
-        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<RegisterModel> logger, IEmailSender emailSender)
+        public RegisterModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, 
+            ILogger<RegisterModel> logger, IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -36,19 +36,16 @@ namespace UpliftStore.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public string ReturnUrl { get; set; }
+        [BindProperty]
+        public string UserRole { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public string ReturnUrl { get; set; }
 
         public class InputModel
         {
             [Required]
-            [Display(Name = "Name")]
-            public string Name { get; set; }
-
-            [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "E-mail")]
             public string Email { get; set; }
 
             [Required]
@@ -61,29 +58,67 @@ namespace UpliftStore.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [StringLength(100)]
+            public string Name { get; set; }
+
+            [Required]
+            [StringLength(100)]
+            public string Street { get; set; }
+
+            [Required]
+            [StringLength(50)]
+            public string City { get; set; }
+
+            [Required]
+            [StringLength(2)]
+            public string State { get; set; }
+
+            [Required]
+            [StringLength(10)]
+            [Display(Name = "Postal code")]
+            public string PostalCode { get; set; }
+
+            [Required]
+            [StringLength(15)]
+            [Display(Name = "Phone number")]
+            public string PhoneNumber { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public void OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser 
                 { 
                     UserName = Input.Email, 
-                    Email = Input.Email 
+                    Email = Input.Email,
+                    Name = Input.Name,
+                    PhoneNumber = Input.PhoneNumber,
+                    Street = Input.Street,
+                    City = Input.City,
+                    State = Input.State,
+                    PostalCode = Input.PostalCode
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    if (!await _roleManager.RoleExistsAsync(SD.Admin))
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.Admin));
+                        await _roleManager.CreateAsync(new IdentityRole(SD.Manager));
+                    }
+
+                    await _userManager.AddToRoleAsync(user, UserRole);
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -104,7 +139,6 @@ namespace UpliftStore.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }

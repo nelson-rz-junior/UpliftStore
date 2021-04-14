@@ -26,5 +26,31 @@ namespace UpliftStore.Areas.Admin.Controllers
 
             return View(users);
         }
+
+        [HttpGet]
+        public IActionResult Lock(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            _unitOfWork.UserRepository.LockUser(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Unlock(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            _unitOfWork.UserRepository.UnlockUser(id);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

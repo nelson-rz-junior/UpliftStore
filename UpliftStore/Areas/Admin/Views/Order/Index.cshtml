@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Order List";
+}
+
+<div class="border backgroundWhite">
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <h2 class="text-primary">Order List</h2>
+        </div>
+        <div>
+            @{ 
+                var status = ViewData["Status"] as string;
+
+                var all = "text-primary";
+                var pending = "text-primary";
+                var approved = "text-primary";
+
+                if (status == "pending")
+                {
+                    pending = "active text-white";
+                }
+                else if (status == "approved")
+                {
+                    approved = "active text-white";
+                }
+                else
+                {
+                    all = "active text-white";
+                }
+            }
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none;" asp-controller="Order" asp-route-status="pending" asp-action="Index">
+                    <li class="list-group-item @pending">Pending</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order" asp-route-status="approved" asp-action="Index">
+                    <li class="list-group-item @approved">Approved</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order" asp-route-status="all" asp-action="Index">
+                    <li class="list-group-item @all">All</li>
+                </a>
+            </ul>
+        </div>
+    </div>
+    <br />
+    <table id="tblData" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone number</th>
+                <th>E-mail</th>
+                <th>Services</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/order.js"></script>
+}

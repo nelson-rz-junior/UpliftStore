@@ -11,21 +11,21 @@
             @{ 
                 var status = ViewData["Status"] as string;
 
-                var all = "text-primary";
-                var pending = "text-primary";
-                var approved = "text-primary";
+                var all = "text-danger";
+                var pending = "text-danger";
+                var approved = "text-danger";
 
                 if (status == "pending")
                 {
-                    pending = "active text-white";
+                    pending = "bg-danger text-white";
                 }
                 else if (status == "approved")
                 {
-                    approved = "active text-white";
+                    approved = "bg-danger text-white";
                 }
                 else
                 {
-                    all = "active text-white";
+                    all = "bg-danger text-white";
                 }
             }
             <ul class="list-group list-group-horizontal-sm">

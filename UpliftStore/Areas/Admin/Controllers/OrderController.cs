@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
+using UpliftStore.Models.ViewModels;
 using UpliftStore.Utility;
 
 namespace UpliftStore.Areas.Admin.Controllers
@@ -20,6 +21,46 @@ namespace UpliftStore.Areas.Admin.Controllers
             ViewData["Status"] = status;
 
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            OrderViewModel orderViewModel = new OrderViewModel
+            {
+                OrderHeader = _unitOfWork.OrderHeaderRepository.Get(id),
+                OrderDetails = _unitOfWork.OrderDetailRepository.GetAll(filter: d => d.OrderHeaderId == id)
+            };
+
+            return View(orderViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Approve(int id)
+        {
+            var orderHeader = _unitOfWork.OrderHeaderRepository.Get(id);
+            if (orderHeader == null)
+            {
+                return NotFound();
+            }
+
+            _unitOfWork.OrderHeaderRepository.ChangeOrderStatus(id, SD.ApprovedStatus);
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpGet]
+        public IActionResult Reject(int id)
+        {
+            var orderHeader = _unitOfWork.OrderHeaderRepository.Get(id);
+            if (orderHeader == null)
+            {
+                return NotFound();
+            }
+
+            _unitOfWork.OrderHeaderRepository.ChangeOrderStatus(id, SD.RejectedStatus);
+
+            return RedirectToAction(nameof(Details), new { id });
         }
 
         #region API Calls

@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
+using UpliftStore.Utility;
 
 namespace UpliftStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = SD.Admin)]
     public class UserController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

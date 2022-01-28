@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
 using UpliftStore.Models.ViewModels;
 using UpliftStore.Utility;
@@ -6,6 +7,7 @@ using UpliftStore.Utility;
 namespace UpliftStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

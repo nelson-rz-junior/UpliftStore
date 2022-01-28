@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
 
 namespace UpliftStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class FrequencyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

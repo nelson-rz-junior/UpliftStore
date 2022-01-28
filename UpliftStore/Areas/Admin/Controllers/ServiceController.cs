@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,6 +10,7 @@ using UpliftStore.Models.ViewModels;
 namespace UpliftStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class ServiceController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

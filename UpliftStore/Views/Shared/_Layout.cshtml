@@ -2,7 +2,7 @@
 @using UpliftStore.Extensions
 @using Microsoft.AspNetCore.Http
 
-@inject IHttpContextAccessor httpContextAccessor 
+@inject IHttpContextAccessor httpContextAccessor
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
 </head>
-<body>
+<body class="search-background">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
             <div class="container">
@@ -27,21 +27,26 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Content Management
-                            </a>
-                            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
-                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Frequency" asp-action="Index">Frequency</a>
-                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Service" asp-action="Index">Service</a>
-                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
-                                <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (User.IsInRole(SD.Manager) || User.IsInRole(SD.Admin))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Content Management
+                                </a>
+                                <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                    <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Frequency" asp-action="Index">Frequency</a>
+                                    <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Service" asp-action="Index">Service</a>
+                                    
+                                    @if (User.IsInRole(SD.Admin))
+                                    {
+                                        <a class="dropdown-item text-white" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+                                    }
+
+                                    <a class="dropdown-item text-white" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+                                </div>
+                            </li>
+                        }
 
                         @{ 
                             var cartItemIds = httpContextAccessor.HttpContext.Session.GetObject<List<int>>(SD.SessionCart);
@@ -78,7 +83,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - UpliftStore
+            &copy; @DateTime.Now.Year - UpliftStore
         </div>
     </footer>
 

@@ -17,6 +17,8 @@ namespace UpliftStore.DataAccess.Data.Repository.Interfaces
 
         IUserRepository UserRepository { get; }
 
+        ISP_Call SP_Call { get; }
+
         void Save();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
+using UpliftStore.Utility;
 
 namespace UpliftStore.Areas.Admin.Controllers
 {
@@ -68,7 +69,7 @@ namespace UpliftStore.Areas.Admin.Controllers
         {
             return new JsonResult(new 
             { 
-                data = _unitOfWork.CategoryRepository.GetAll() 
+                data = _unitOfWork.SP_Call.GetAll<Models.Category>(SD.USP_GetAllCategories)
             });
         }
 

@@ -19,6 +19,8 @@ namespace UpliftStore.DataAccess.Data.Repository.Interfaces
 
         ISP_Call SP_Call { get; }
 
+        IWebImageRepository WebImageRepository { get; }
+
         void Save();
     }
 }

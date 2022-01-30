@@ -105,3 +105,7 @@ body {
     min-height: 38px;
     border-radius: 2px;
 }
+
+.dt-valign-middle {
+    vertical-align: middle !important;
+}

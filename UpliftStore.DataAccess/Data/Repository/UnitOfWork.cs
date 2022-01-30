@@ -21,6 +21,8 @@ namespace UpliftStore.DataAccess.Data.Repository
 
         public ISP_Call SP_Call { get; private set; }
 
+        public IWebImageRepository WebImageRepository { get; private set; }
+
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -32,6 +34,7 @@ namespace UpliftStore.DataAccess.Data.Repository
             OrderDetailRepository = new OrderDetailRepository(_context);
             UserRepository = new UserRepository(_context);
             SP_Call = new SP_Call(_context);
+            WebImageRepository = new WebImageRepository(_context);
         }
 
         public void Save()

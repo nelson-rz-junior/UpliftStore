@@ -1,0 +1,107 @@
+﻿@model UpliftStore.Models.WebImage
+
+@{ 
+    ViewData["Title"] = Model.Id != 0 ? "Edit Image" : "Create Image";
+}
+
+<form method="post" asp-action="Upsert" enctype="multipart/form-data">
+    <div class="row px-2 mx-2 backgroundWhite border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        @if (Model.Id != 0)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+        
+        <div class="col-12">
+            <h2 class="text-primary">@ViewData["Title"]</h2>
+            <br />
+        </div>
+        <div class="col-8">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Name" class="form-control" />
+                    <span id="nameError" asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Picture"></label>
+                </div>
+                <div class="col-8">
+                    <input type="file" class="form-control" asp-for="Picture" />
+                    <span id="pictureError" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-8 offset-4">
+                    @if (Model.Id != 0)
+                    {
+                        <partial name="_EditAndBackToListButton" model="Model.Id" />
+                    }
+                    else
+                    {
+                        <partial name="_CreateAndBackToListButton" />
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Picture != null)
+        {
+            <div class="col-4 col-4 d-flex justify-content-center">
+                @{
+                    var base64 = Convert.ToBase64String(Model.Picture);
+                    var image = $"data:image/jpeg;base64, {base64}";
+                }
+
+                <img src="@image" height="100%" width="100%" />
+            </div>
+        }
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#btnCreateElement").click(function() {
+                let validate = true;
+
+                if ($("#Name").val() === "") {
+                    $("#nameError").text("The Name field is required.");
+                    $("#nameError").focus();
+                    validate = false;
+                }
+
+                if ($("#Picture").val() === "") {
+                    $("#pictureError").text("The Picture field is required.");
+                    $("#pictureError").focus();
+                    validate = false;
+                }
+
+                return validate;
+            });
+        });
+    </script>
+
+   @if (Model.Id == 0)
+   {
+       <script type="text/javascript">
+            $(document).ready(function() {
+                $("#Picture").change(function() {
+                    if ($("#Picture").val() === "") {
+                        $("#pictureError").text("The Picture field is required.");
+                    }
+                    else {
+                        $("#pictureError").text("");
+                    }
+                });
+            });
+       </script>
+   }
+}

@@ -116,7 +116,7 @@
             if (btnCreateElement) {
                 var uploadBox = document.getElementById('uploadBox');
 
-                btnCreateElement.addEventListener('click', function () {
+                btnCreateElement.addEventListener('click', function (event) {
                     if (uploadBox.value === '') {
                         event.preventDefault();
 

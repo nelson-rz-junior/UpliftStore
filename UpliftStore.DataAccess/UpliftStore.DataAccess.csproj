@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Initializer\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\UpliftStore.Models\UpliftStore.Models.csproj" />
     <ProjectReference Include="..\UpliftStore.Utility\UpliftStore.Utility.csproj" />
   </ItemGroup>

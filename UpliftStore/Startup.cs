@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using UpliftStore.DataAccess.Data;
+using UpliftStore.DataAccess.Data.Initializer;
 using UpliftStore.DataAccess.Data.Repository;
 using UpliftStore.DataAccess.Data.Repository.Interfaces;
 using UpliftStore.Models;
@@ -35,6 +36,8 @@ namespace UpliftStore
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddSingleton<IEmailSender, EmailSender>();
 
@@ -68,7 +71,7 @@ namespace UpliftStore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -88,6 +91,8 @@ namespace UpliftStore
             app.UseCookiePolicy();
 
             app.UseRouting();
+
+            dbInitializer.Initialize();
 
             app.UseAuthentication();
             app.UseAuthorization();

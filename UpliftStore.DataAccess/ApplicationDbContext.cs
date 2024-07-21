@@ -5,6 +5,7 @@ using UpliftStore.Models;
 namespace UpliftStore.DataAccess.Data
 {
     // MIGRATIONS
+    // cd .\UpliftStore.DataAccess
     // dotnet ef migrations add InitialConfiguration --context ApplicationDbContext --startup-project D:\Projects\UpliftStore\UpliftStore\UpliftStore.csproj
     // dotnet ef database update --context ApplicationDbContext --startup-project D:\Projects\UpliftStore\UpliftStore\UpliftStore.csproj
 

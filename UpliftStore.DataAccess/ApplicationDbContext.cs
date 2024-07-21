@@ -4,6 +4,10 @@ using UpliftStore.Models;
 
 namespace UpliftStore.DataAccess.Data
 {
+    // MIGRATIONS
+    // dotnet ef migrations add InitialConfiguration --context ApplicationDbContext --startup-project D:\Projects\UpliftStore\UpliftStore\UpliftStore.csproj
+    // dotnet ef database update --context ApplicationDbContext --startup-project D:\Projects\UpliftStore\UpliftStore\UpliftStore.csproj
+
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
